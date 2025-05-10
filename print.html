@@ -1,0 +1,711 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Jet™</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Jet™</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>Media master. Write in ActionScript. Target native apps.</p>
+<h2 id="features"><a class="header" href="#features">Features</a></h2>
+<h3 id="event-model"><a class="header" href="#event-model">Event model</a></h3>
+<p>Concise events. Define your own.</p>
+<h3 id="documentation-comments"><a class="header" href="#documentation-comments">Documentation comments</a></h3>
+<p>Document easy with ASDoc.</p>
+<h3 id="package-manager"><a class="header" href="#package-manager">Package manager</a></h3>
+<p>Dependencies and workspaces, easy.</p>
+<h3 id="e4x"><a class="header" href="#e4x">E4X</a></h3>
+<p>Reactive user interface.</p>
+<h3 id="cascading-style-sheet"><a class="header" href="#cascading-style-sheet">Cascading Style Sheet</a></h3>
+<p>Link style sheets to components easily.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="actionscript"><a class="header" href="#actionscript">ActionScript</a></h1>
+<p>Jet uses the ActionScript 3 language, fine-tuned.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="packages"><a class="header" href="#packages">Packages</a></h1>
+<p>ActionScript packages are used for organizing definitions, using left-to-right hierarchic names.</p>
+<pre><code>package { public var x = 10 }
+
+package me.diantha { public var y = 15 }
+
+// (top-level).x
+x
+
+import me.diantha.*;
+
+// me.diantha.y
+y
+me.diantha.y
+</code></pre>
+<h2 id="default-scope"><a class="header" href="#default-scope">Default scope</a></h2>
+<p>The language's default scope imports the top-level package, and it is the parent scope of the scope in each source file; therefore it is possible to override the name of top-level items, such as <code>Number</code>, <code>Array</code> and <code>parseInt</code>.</p>
+<h2 id="global"><a class="header" href="#global">global</a></h2>
+<p>The <code>global</code> namespace equals the <code>public</code> namespace of the top-level package. It may be necessary when an item overrides a top-level item, as in:</p>
+<pre><code>package q.f {
+    public const Number : global::Number = 10;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="types"><a class="header" href="#types">Types</a></h1>
+<h2 id="wildcard"><a class="header" href="#wildcard">Wildcard</a></h2>
+<p>The <code>*</code> type means untyped, and accepts all possible values in the language.</p>
+<pre><code>*
+</code></pre>
+<h2 id="void"><a class="header" href="#void">void</a></h2>
+<p>undefined.</p>
+<pre><code>void
+</code></pre>
+<h2 id="null"><a class="header" href="#null">null</a></h2>
+<pre><code>null
+</code></pre>
+<h2 id="string"><a class="header" href="#string">String</a></h2>
+<p>String is a UTF-16 encoded sequence of characters.</p>
+<pre><code>String
+</code></pre>
+<h2 id="boolean"><a class="header" href="#boolean">Boolean</a></h2>
+<p><code>false</code> or <code>true</code>.</p>
+<pre><code>Boolean
+</code></pre>
+<h2 id="number"><a class="header" href="#number">Number</a></h2>
+<p>IEEE 754 double-precision floating point.</p>
+<pre><code>Number
+</code></pre>
+<h2 id="bigint"><a class="header" href="#bigint">BigInt</a></h2>
+<p>Arbitrary range integer.</p>
+<pre><code>BigInt
+</code></pre>
+<h2 id="float"><a class="header" href="#float">float</a></h2>
+<p>IEEE 754 single-precision floating point.</p>
+<pre><code>float
+</code></pre>
+<h2 id="decimal"><a class="header" href="#decimal">decimal</a></h2>
+<p>IEEE 754 quadruple-precision floating point (binary128).</p>
+<pre><code>decimal
+</code></pre>
+<h2 id="int"><a class="header" href="#int">int</a></h2>
+<p>Signed 32-bit integer.</p>
+<pre><code>int
+</code></pre>
+<h2 id="uint"><a class="header" href="#uint">uint</a></h2>
+<p>Unsigned 32-bit integer.</p>
+<pre><code>uint
+</code></pre>
+<h2 id="tuple"><a class="header" href="#tuple">Tuple</a></h2>
+<p>Tuples, when untyped, have the <code>length</code> property available.</p>
+<pre><code>[T1, T2]
+</code></pre>
+<h2 id="array"><a class="header" href="#array">Array</a></h2>
+<p>The <code>Array</code> type represents a dynamic list of elements, optimized for when <code>T</code> is a number; for instance, <code>[uint]</code> will use a growable buffer optimized specifically for 32-bit unsigned integers.</p>
+<pre><code>[T]
+</code></pre>
+<h2 id="structural-function"><a class="header" href="#structural-function">Structural function</a></h2>
+<p>Structural function types inherit from <code>Function</code>.</p>
+<pre><code>function(T1, T2=, ...[T3]):E
+</code></pre>
+<h2 id="union"><a class="header" href="#union">Union</a></h2>
+<pre><code>(Ta, Tb)
+</code></pre>
+<h2 id="map"><a class="header" href="#map">Map</a></h2>
+<pre><code>Map.&lt;K, V&gt;
+</code></pre>
+<p>Usage instance:</p>
+<pre><code>const map = new Map.&lt;String, Number&gt;();
+
+// x=10
+map.x = 10;
+
+const fns = new Map.&lt;String, Function&gt;();
+
+// m=function
+fns.m = function() { return 10 };
+
+// m()
+trace(fns.call("m"));
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> Property access on a <code>Map</code> equals data access. Method call on a <code>Map</code> equals <code>Map</code> method use.</p>
+</blockquote>
+<h2 id="structural-object"><a class="header" href="#structural-object">Structural object</a></h2>
+<p>Structural object types are compiled into efficient structures.</p>
+<pre><code>{
+    /** x */
+    x:Number,
+
+    /** y */
+    y?:Boolean,
+}
+</code></pre>
+<p><code>...rest</code> components may appear, where <code>rest</code> must be another structural object type; the resulting type may be a subtype of <code>rest</code> depending on whether properties do not collide.</p>
+<pre><code>// A
+type A = { x:Number };
+// B
+type B = { y:Number, ...A };
+// U
+type U = { ...W, ...B };
+// W
+type W = { z:Number };
+</code></pre>
+<h2 id="objects"><a class="header" href="#objects">Objects</a></h2>
+<p>All types except <code>void</code>, <code>null</code>, <code>uint</code>, <code>int</code>, <code>float</code>, <code>Number</code>, <code>decimal</code>, <code>BigInt</code> and <code>Boolean</code> represent referenceable objects that may be <code>null</code>. The <code>Object</code> class is inherited by all types, except <code>*</code>, <code>void</code>, <code>null</code> and unions.</p>
+<p>The <code>Object</code> class, unlike in standard ActionScript, is not untyped and there is no support for <code>dynamic</code> classes; therefore, it is preferable to use the <code>*</code> type when it is necessary to access prototype properties such as <code>constructor</code> and <code>toString()</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="type-conversion"><a class="header" href="#type-conversion">Type conversion</a></h1>
+<h2 id="optional-conversion"><a class="header" href="#optional-conversion">Optional conversion</a></h2>
+<p>An optional conversion will return the default value of <code>T</code> on conversion failure (such as <code>null</code> for most types).</p>
+<pre><code>v as T
+</code></pre>
+<h2 id="forced-conversion"><a class="header" href="#forced-conversion">Forced conversion</a></h2>
+<p>A forced conversion throws a <code>TypeError</code> on conversion failure.</p>
+<pre><code>T(v)
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="type-matching"><a class="header" href="#type-matching">Type matching</a></h1>
+<h2 id="type-test"><a class="header" href="#type-test">Type test</a></h2>
+<pre><code>v is T
+</code></pre>
+<h2 id="switch"><a class="header" href="#switch">Switch</a></h2>
+<pre><code>switch type (v) {
+    case (n:Number) {
+        trace("number");
+    }
+    default {
+        trace("any other");
+    }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="classes"><a class="header" href="#classes">Classes</a></h1>
+<h2 id="inheritance"><a class="header" href="#inheritance">Inheritance</a></h2>
+<p>By default a class extends <code>Object</code>. Use the <code>extends</code> clause for extending a specific class:</p>
+<pre><code>class B extends A {}
+</code></pre>
+<h2 id="constructor"><a class="header" href="#constructor">Constructor</a></h2>
+<p>By default the constructor is based in the base class's constructor and will initialize the instance with default property values.</p>
+<p>Define a constructor for a class using its name in a function definition:</p>
+<pre><code>class A {
+    public function A() {}
+}
+</code></pre>
+<h2 id="abstract-classes"><a class="header" href="#abstract-classes">Abstract classes</a></h2>
+<pre><code>abstract class A {
+    abstract function m():void;
+}
+</code></pre>
+<h2 id="static-classes"><a class="header" href="#static-classes">Static classes</a></h2>
+<pre><code>static class MyNamespace {
+    public static const VALUE:Number = 10.5;
+}
+</code></pre>
+<h2 id="final-classes"><a class="header" href="#final-classes">Final classes</a></h2>
+<pre><code>final class A {}
+
+class B extends A {} // ERROR!
+</code></pre>
+<h2 id="override"><a class="header" href="#override">Override</a></h2>
+<pre><code>class A {
+    function m() {}
+}
+
+class B extends A {
+    override function m() { trace("B!") }
+}
+</code></pre>
+<h2 id="final-method"><a class="header" href="#final-method">Final method</a></h2>
+<pre><code>class A {
+    final function m() {}
+}
+
+class B extends A {
+    override function m() { trace("B!") } // ERROR!
+}
+</code></pre>
+<h2 id="super"><a class="header" href="#super">Super</a></h2>
+<pre><code>class A {
+    function A() { trace("A!") }
+
+    function m() { trace("A.m!") }
+}
+
+class B extends A {
+    function B() { super(); trace("B!") }
+
+    override function m() { super.m(); trace("B.m!") }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="namespaces"><a class="header" href="#namespaces">Namespaces</a></h1>
+<p>ActionScript 3 uses three-dimensional property names: a property consists of a namespace and a local name.</p>
+<h2 id="private-access"><a class="header" href="#private-access">Private access</a></h2>
+<p>You can use ActionScript namespaces to privatize definitions across class fields and access them from any package as long as the used namespace is in scope:</p>
+<pre><code>// MyLibInternals.as
+package my.lib {
+    /**
+     * @private
+     */
+    public namespace MyLibInternals = "http://my.lib/internals";
+}
+
+// Atom.as
+package my.lib.atoms {
+    import my.lib.*;
+
+    public class Atom {
+        /**
+         * @private
+         */
+        MyLibInternals var x:Number = 10;
+    }
+}
+
+// consumer.as
+import my.lib.*;
+import my.lib.atoms.*;
+
+const atom = new Atom();
+trace(atom.MyLibInternals::x);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="events"><a class="header" href="#events">Events</a></h1>
+<p>The native <code>EventEmitter</code> class is designated for dispatching and listening to events, and is the one used for implementing the hierarchic event model in the display list API.</p>
+<p>In addition, the <code>IEventEmitter</code> interface may be implemented instead of extending the <code>EventEmitter</code> class.</p>
+<h2 id="an-event-emitter"><a class="header" href="#an-event-emitter">An event emitter</a></h2>
+<pre><code>/**
+ * On play event.
+ */
+[Event(name="play", type="Event")]
+/**
+ * My player class.
+ */
+class Player extends EventEmitter {
+
+    public function aMethod() {
+        this.emit(new Event("play"));
+    }
+}
+</code></pre>
+<p><code>Player</code> usage:</p>
+<pre><code>player.on("play", function() { trace("played") });
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> Unlike in Flash Player, the convention of using static constants for identifying event types is discarded.</p>
+</blockquote>
+<h2 id="an-event-class"><a class="header" href="#an-event-class">An event class</a></h2>
+<p>Event constructors must always take the event type as the first argument; any other arguments may follow.</p>
+<pre><code>class SomeEvent extends Event {
+    //
+    public function SomeEvent(type: String) {
+        super(type);
+    }
+}
+</code></pre>
+<h2 id="emitting"><a class="header" href="#emitting">Emitting</a></h2>
+<p>The <code>EventEmitter#emit()</code> method is defined as follows:</p>
+<pre><code>public function emit.&lt;E extends Event(this,object)&gt;(e:E) : Boolean {
+    //
+}
+</code></pre>
+<p>When the <code>emit()</code> method is used, it will force a <code>new E(...)</code> expression to be a correct <code>Event</code> object construction, by ensuring the first argument identifies a determined event type according to <code>E</code>.</p>
+<h2 id="listening"><a class="header" href="#listening">Listening</a></h2>
+<p>The <code>EventEmitter#on()</code> method is roughly defined as follows:</p>
+<pre><code>public function on.&lt;E extends Event(this,type)&gt;(
+    type: E.name,
+    listener: function(E.type):void,
+) : void {
+    //
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="environment-variables"><a class="header" href="#environment-variables">Environment variables</a></h1>
+<p>Environment variables may be read from the project's <code>.env</code> file using the <code>import.meta.env.VAR_NAME</code> expression:</p>
+<pre><code>import.meta.env.FOO
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="embed"><a class="header" href="#embed">Embed</a></h1>
+<p>The <code>Embed()</code> expression may be used for embedding static media into the program.</p>
+<pre><code>const text : String = Embed("data.txt");
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: In Flash Player, an <code>[Embed]</code> meta-data was used in definitions in order to embed static files; this is not the case with Jet engine.</p>
+</blockquote>
+<h2 id="mime-type"><a class="header" href="#mime-type">MIME type</a></h2>
+<p>Through type inference, the <code>Embed()</code> expression results in either <code>String</code> (UTF-8 interpretation) or <code>ByteArray</code> (octet stream).</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="conditional-compilation"><a class="header" href="#conditional-compilation">Conditional compilation</a></h1>
+<p><code>NAMESPACE::CONSTANT</code> may match a set configuration constant.</p>
+<pre><code>NAMESPACE::CONSTANT {
+    //
+}
+
+NAMESPACE::CONSTANT var x
+</code></pre>
+<p>Inline constants:</p>
+<pre><code>trace(NAMESPACE::CONSTANT)
+</code></pre>
+<h2 id="pre-defined-configuration-constants"><a class="header" href="#pre-defined-configuration-constants">Pre-defined configuration constants</a></h2>
+<h2 id="rtclient"><a class="header" href="#rtclient">RT::client</a></h2>
+<p><code>RT::client</code> indicates whether the target environment is the client side.</p>
+<h2 id="rtserver"><a class="header" href="#rtserver">RT::server</a></h2>
+<p><code>RT::server</code> indicates whether the target environment is the server side.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="asynchronous-code"><a class="header" href="#asynchronous-code">Asynchronous code</a></h1>
+<pre><code>function myMethod(): Promise.&lt;Boolean&gt; {
+    return await other();
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="e4x-1"><a class="header" href="#e4x-1">E4X</a></h1>
+<p>ECMAScript for XML (E4X) comprises XML markup and XML data manipulation facilities.</p>
+<h2 id="markup"><a class="header" href="#markup">Markup</a></h2>
+<p>XML markup is directly used in ActionScript 3 for rendering reactive UI components.</p>
+<pre><code>package me.diantha.portfolio {
+    /** Portfolio */
+    public function Portfolio() {
+        return (
+            &lt;&gt;
+                &lt;j:VGroup xmlns:j="jet.components.**" gap={5}&gt;
+                    &lt;!-- some comment --&gt;
+                    &lt;j:Label&gt;
+                        &lt;markdown&gt;
+                            Hi **there**.
+                        &lt;/markdown&gt;
+                    &lt;/j:Label&gt;
+                &lt;/j:VGroup&gt;
+            &lt;/&gt;
+        );
+    }
+}
+</code></pre>
+<p>XML namespaces are used for importing packages solely within the markup, either non-recursive (<code>q.f.*</code>) or recursive (<code>q.f.**</code>). It is additionally allowed to use lexical names and fully qualified names like <code>&lt;jet.components.HGroup&gt;</code> as long as the component name is in scope.</p>
+<blockquote>
+<p><strong>Note:</strong> Unlike the E4X standard 2nd edition, markup does not result in <code>XML</code> or <code>XMLList</code> objects, but rather <code>ReactNode</code>; and there is support for <code>a</code> attributes without an attribute value, which equals <code>a={true}</code>.</p>
+</blockquote>
+<h3 id="markdown"><a class="header" href="#markdown">Markdown</a></h3>
+<p>Use <code>&lt;markdown&gt;</code> tags for translating Markdown to HyperText Markup Language (HTML) text.</p>
+<blockquote>
+<p><strong>Note:</strong> Tags nested with <code>&lt;markdown&gt;</code> must comply with XHTML tags; for instance, use <code>&lt;br/&gt;</code> instead of <code>&lt;br&gt;</code>.</p>
+</blockquote>
+<p>It is additionally allowed to interpolate text or arbitrary markup inside a <code>&lt;markdown&gt;</code> tag:</p>
+<pre><code class="language-xml">&lt;markdown&gt;
+    &lt;!-- interpolate plain text --&gt;
+    Hi, {personName}
+
+    &lt;!-- interpolate HTML --&gt;
+    Hi, &lt;?hypertext {personName}?&gt;
+
+    &lt;!-- interpolate Markdown (not XHTML) --&gt;
+    Hi, &lt;?markdown {personName}?&gt;
+&lt;/markdown&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="asdoc"><a class="header" href="#asdoc">ASDoc</a></h1>
+<p>Documentation comments use the format <code>/** */</code>, with lines optionally beginning with <code>*</code>. Markdown notation is supported in ASDoc comments.</p>
+<h2 id="local-images"><a class="header" href="#local-images">Local images</a></h2>
+<p>ASDoc comments may refer to relative images.</p>
+<h2 id="supported-tags"><a class="header" href="#supported-tags">Supported tags</a></h2>
+<h2 id="copy"><a class="header" href="#copy">@copy</a></h2>
+<p>Copies documentation comment from another definition. Use a <code>#x</code> component to refer to an instance property.</p>
+<pre><code class="language-plain">@copy A
+@copy A.w
+@copy A#x
+@copy #x
+</code></pre>
+<h2 id="deprecated"><a class="header" href="#deprecated">@deprecated</a></h2>
+<pre><code class="language-plain">@deprecated [Description]
+</code></pre>
+<h2 id="internal"><a class="header" href="#internal">@internal</a></h2>
+<p>Internal comment for an item (not included in the generated documentation).</p>
+<pre><code class="language-plain">@internal Comment.
+</code></pre>
+<h2 id="inheritdoc"><a class="header" href="#inheritdoc">@inheritDoc</a></h2>
+<p>Inherits documentation from base class or base class's item.</p>
+<pre><code class="language-plain">@inheritDoc
+</code></pre>
+<h2 id="see"><a class="header" href="#see">@see</a></h2>
+<p>Where <code>item</code> maybe an item reference with optional <code>#x</code> instance property, or just an instance property <code>#x</code>.</p>
+<pre><code class="language-plain">@see item [Display text]
+</code></pre>
+<h2 id="param"><a class="header" href="#param">@param</a></h2>
+<pre><code class="language-plain">@param paramName Description
+</code></pre>
+<h2 id="private"><a class="header" href="#private">@private</a></h2>
+<p>Hides an item from the generated documentation.</p>
+<pre><code class="language-plain">@private
+</code></pre>
+<h2 id="return"><a class="header" href="#return">@return</a></h2>
+<pre><code class="language-plain">@return Description
+</code></pre>
+<h2 id="throws"><a class="header" href="#throws">@throws</a></h2>
+<pre><code class="language-plain">@throws ClassName [Description]
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="statements"><a class="header" href="#statements">Statements</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="forin"><a class="header" href="#forin">For..in</a></h1>
+<p>Iterate keys:</p>
+<pre><code>for (var key in o) {
+    //
+}
+</code></pre>
+<p>Iterate values:</p>
+<pre><code>for each (var value in o) {
+    //
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="import"><a class="header" href="#import">Import</a></h1>
+<p>All of a pacakge:</p>
+<pre><code>import q.f.*;
+</code></pre>
+<p>Specific property:</p>
+<pre><code>import q.f.x;
+</code></pre>
+<p>Alias:</p>
+<pre><code>import x1 = q.f.x;
+</code></pre>
+<p>Alias a package:</p>
+<pre><code>import f = q.f.*;
+
+f::x
+</code></pre>
+<p>Alias a package recursively:</p>
+<pre><code>package q.f.w {
+    public var x = 10;
+}
+
+import f = q.f.**;
+f::x
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="switch-1"><a class="header" href="#switch-1">Switch</a></h1>
+<p>The switch statement, as opposed to the standard, does not support fallthrough in cases.</p>
+<pre><code>switch (0) {
+    case 0: {
+        trace("zero");
+    }
+    case 1: {
+        trace("one");
+    }
+}
+</code></pre>
+<p>The above prints "zero", not "zero" then "one".</p>
+<h2 id="switch-type"><a class="header" href="#switch-type">Switch type</a></h2>
+<pre><code>switch type (v) {
+    case (d:Date) {
+        //
+    }
+    default {
+        //
+    }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="try"><a class="header" href="#try">Try</a></h1>
+<pre><code>try {
+    //
+} catch (e: SecurityError) {
+    //
+} catch (e: RangeError) {
+    //
+} finally {
+    //
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="expressions"><a class="header" href="#expressions">Expressions</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="string-literal"><a class="header" href="#string-literal">String literal</a></h1>
+<h2 id="triple-string-literal"><a class="header" href="#triple-string-literal">Triple string literal</a></h2>
+<p>Triple string literals span multiple lines and are indentation-aware.</p>
+<pre><code>const text =
+    """
+    a
+    """
+
+assert(text == "a")
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="display-list"><a class="header" href="#display-list">Display List</a></h1>
+<p>The Display List is a hierarchy of two-dimensional display objects.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="points-and-scale-factor"><a class="header" href="#points-and-scale-factor">Points and scale factor</a></h1>
+<p>A point is a 1/72nd of an inch.</p>
+<h2 id="scale-factor"><a class="header" href="#scale-factor">Scale factor</a></h2>
+<p>In the display list, all the point units are affected by the global scale factor (<code>ScaleFactor#scale</code>).</p>
+<pre><code>scaleFactor.on("change", function() {
+    //
+});
+
+scaleFactor.scale = 10; 
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
