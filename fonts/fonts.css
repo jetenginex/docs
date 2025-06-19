@@ -1,0 +1,13 @@
+/* Noto Sans */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Crimson Pro */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+
+/* Nimbus Mono */
+@font-face {
+    font-family: "Nimbus Mono";
+    font-weight: 400;
+    src: url(NimbusMono-Bold.ttf) format("truetype"),
+        url(NimbusMono-Bold.woff2) format("woff2");
+}

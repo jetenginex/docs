@@ -1,0 +1,69 @@
+
+/* Globals */
+
+:root {
+    --sidebar-target-width: 300px;
+    --sidebar-width: min(var(--sidebar-target-width), 80vw);
+    --sidebar-resize-indicator-width: 8px;
+    --sidebar-resize-indicator-space: 2px;
+    --page-padding: 15px;
+    --content-max-width: 750px;
+    --menu-bar-height: 50px;
+    --font: "Crimson Pro", "Cambria", sans-serif;
+    --ui-font: "Noto Sans", "Segoe UI", sans-serif;
+    --mono-font: "Nimbus Mono", "Courier New", monospace;
+    --code-font-size: 0.79em; /* please adjust the ace font size accordingly in editor.js */
+}
+
+/* Themes */
+
+.ayu, .coal, .light, html:not(.js), .navy, .rust {
+    --bg: #222;
+    --fg: #fff;
+
+    --sidebar-bg: #222;
+    --sidebar-fg: #fff;
+    --sidebar-non-existant: #5c6773;
+    --sidebar-active: #f4ec31;
+    --sidebar-spacer: #2d334f;
+
+    --scrollbar: var(--sidebar-fg);
+
+    --icons: #737480;
+    --icons-hover: #b7b9cc;
+
+    --links: #0096cf;
+
+    --inline-code-color: #fff;
+
+    --theme-popup-bg: #14191f;
+    --theme-popup-border: #5c6773;
+    --theme-hover: #191f26;
+
+    --quote-bg: rgba(205, 205, 255, 0.2);
+    --quote-border: rgba(255, 255, 255, 0.3);
+
+    --warning-border: #ff8e00;
+
+    --table-border-color: rgba(255, 255, 255, 0.5);
+    --table-header-bg: rgba(255, 255, 255, 0.3);
+    --table-alternate-bg: rgba(255, 255, 255, 0.2);
+
+    --searchbar-border-color: #848484;
+    --searchbar-bg: #424242;
+    --searchbar-fg: #fff;
+    --searchbar-shadow-color: #d4c89f;
+    --searchresults-header-fg: #666;
+    --searchresults-border-color: #888;
+    --searchresults-li-bg: #252932;
+    --search-mark-bg: #e3b171;
+
+    --color-scheme: dark;
+
+    /* Same as `--icons` */
+    --copy-button-filter: invert(45%) sepia(6%) saturate(621%) hue-rotate(198deg) brightness(99%) contrast(85%);
+    /* Same as `--sidebar-active` */
+    --copy-button-filter-hover: invert(68%) sepia(55%) saturate(531%) hue-rotate(341deg) brightness(104%) contrast(101%);
+
+    --footnote-highlight: #2668a6;
+}
